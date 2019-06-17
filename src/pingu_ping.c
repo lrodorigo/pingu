@@ -74,7 +74,7 @@ static struct pingu_ping *pingu_ping_find(struct icmphdr *icp,
 					  struct list_head *ping_list)
 {
 	struct pingu_ping *ping;
-	if (icp->type != ICMP_ECHOREPLY || icp->un.echo.id != getpid())
+	if (icp->type != ICMP_ECHOREPLY || icp->un.echo.id != icp->un.echo.sequence)
 		return NULL;
 
 	list_for_each_entry(ping, ping_list, ping_list_entry) {

@@ -176,7 +176,7 @@ int icmp_parse_reply(__u8 *buf, int len, int seq,
 	csfailed = in_cksum((u_short *)icp, len, 0);
 
 	if (icp->type == ICMP_ECHOREPLY) {
-		if (icp->un.echo.id != getpid() ||
+		if (icp->un.echo.id != icp->un.echo.sequence ||
 		    ntohs(icp->un.echo.sequence) != seq)
 			return 1;			/* 'Twas not our ECHO */
 
@@ -206,7 +206,7 @@ int icmp_parse_reply(__u8 *buf, int len, int seq,
 					return 1;
 				if (icp1->type != ICMP_ECHO ||
 				    iph->daddr != to->sin_addr.s_addr ||
-				    icp1->un.echo.id != getpid() ||
+				    icp1->un.echo.id != icp1->un.echo.sequence ||
 				    ntohs(icp1->un.echo.sequence) != seq)
 					return 1;
 				error_pkt = (icp->type != ICMP_REDIRECT &&
@@ -291,12 +291,12 @@ int icmp_send_ping(int fd, struct sockaddr *to, int tolen,
 	icp->code = 0;
 	icp->checksum = 0;
 	icp->un.echo.sequence = htons(seq);
-	icp->un.echo.id = getpid();
+	icp->un.echo.id = htons(seq);
+//	icp->un.echo.id = getpid();
 	icp->checksum = in_cksum((u_short *) icp, len, 0);
-#if 0
-	printf("To %s: icmp_seq=%u bytes=%d\n",
-	       pr_addr(to_in->sin_addr.s_addr), seq, len);
-#endif
+
+	printf("To %s: icmp_seq=%u bytes=%d\n",pr_addr(to->sa_data), seq, len);
+
 	return icmp_send(fd, to, tolen, (void *) packet, len);
 }
 
