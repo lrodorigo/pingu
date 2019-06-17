@@ -13,7 +13,7 @@ export PINGU_VERSION
 SUBDIRS := src
 
 ifdef ENABLE_DOC
-SUBDIRS += doc
+
 endif
 
 all: $(SUBDIRS)
