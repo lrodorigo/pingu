@@ -7,15 +7,16 @@ multi ISP setups.
 
 **This fork is born to overcome some stupid features of the router installed by the major Italian ISP (aka TIM==Telecom Italia).**
 
-Seems that, after a  disconnection of the carrier, these routers block all the ICMP responses with an `Identifier` field already seen before the disconnection. 
+Seems that, after a  disconnection of the phone carrier,  these routers block all the ICMP responses with an `Identifier` field already seen before the disconnection. 
 
-This version changes the `Identifier` (which, by Linux convention, reports the PID of the process sending the ICMP request). The modified `Identifier` field is placed to  the same value of the `Sequence number`, and the processing of the incoming ICMP request has been modified to compare the `Indentifier` field with the `Sequence number`.
+This version changes the `Identifier` (which, by Linux convention, reports the PID of the process sending the ICMP request) and the modified `Identifier` field is placed to the same value of the `Sequence number`. The processing of the incoming ICMP replies has been modified to compare the `Indentifier` field with the `Sequence number`.
 
 
 
 
 Features
 --------
+- **Fight again stupid TIM routers features**
 - Support for DHCP
 - Support for PPP
 - ISP failover
